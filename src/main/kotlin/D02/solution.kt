@@ -1,11 +1,9 @@
 package D02
 
 import input
-import kotlin.io.path.Path
-import kotlin.io.path.readLines
 
 fun main() {
-    val input = input(2).readLines().map { line -> Movement(line.split(' ')) }
+    val input = input(2).map { line -> Movement(line.split(' ')) }
     val result = input.fold(0 to 0) { result, movement ->
         when (movement.direction) {
             Direction.forward -> result.first + movement.amount to result.second

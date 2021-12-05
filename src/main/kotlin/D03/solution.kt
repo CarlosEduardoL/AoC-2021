@@ -2,11 +2,10 @@ package D03
 
 import D03.Representativity.Companion.value
 import input
-import kotlin.io.path.readLines
 import kotlin.math.abs
 
 fun main() {
-    val input = input(3).readLines()
+    val input = input(3)
     var result: Number? = null
     input.map { Number(it) }.forEach {
         result = result?.plus(it) ?: it

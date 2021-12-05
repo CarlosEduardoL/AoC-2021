@@ -6,7 +6,7 @@ import kotlin.io.path.readLines
 
 fun main() {
     val input =
-        input(4).readLines().map { " {2,}".toRegex().replace(it, " ").trim() }.filter { it != "" }.toMutableList()
+        input(4).map { " {2,}".toRegex().replace(it, " ").trim() }.filter { it != "" }.toMutableList()
     val numbers = input.removeAt(0).split(',').map(String::toByte).toByteArray()
     val boards = input.windowed(5, step = 5).map{Board(it)}
     val (winner, lastNumber) = getWinner(numbers, boards)
