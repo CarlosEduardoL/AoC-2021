@@ -1,28 +1,28 @@
-package D05
+import java.nio.file.Files
+import java.nio.file.Path
 
-import input
-import test
 
 fun List<Line>.count(ignoreDiagonal: Boolean = false): Int {
-    val counter = mutableMapOf<Point, Int>()
-    forEach { line ->
-        line.forEach(ignoreDiagonal) {
-            counter[it] = 1 + counter.getOrDefault(it, 0)
+    return mutableMapOf<Point, Int>().also { counter ->
+        forEach { line ->
+            line.forEach(ignoreDiagonal) {
+                counter[it] = 1 + counter.getOrDefault(it, 0)
+            }
         }
-    }
-    return counter.count { it.value >= 2 }
+    }.count { it.value >= 2 }
 }
 
-fun main() {
-    val input = input(5)
-        .map { it.split(",|->".toRegex()).map(String::trim) }
-        .map { row -> row.map { it.toInt() } }
-        .map { Line(it) }
-    // part 1 - 5576
-    println(input.count(true))
-    // part 2 - 18144
-    println(input.count())
-}
+
+val input = Path.of("input", "input-5.txt")
+    .let(Files::readAllLines)
+    .map { it.split(",|->".toRegex()).map(String::trim) }
+    .map { row -> row.map { it.toInt() } }
+    .map { Line(it) }
+// part 1 - 5576
+println(input.count(true))
+// part 2 - 18144
+println(input.count())
+
 
 data class Line(val start: Point, val end: Point) {
     constructor(data: List<Int>) : this(Point(data[0], data[1]), Point(data[2], data[3]))
