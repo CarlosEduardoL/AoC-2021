@@ -1,40 +1,8 @@
-import Day3_main.BitCounter.Companion.value
-import java.nio.file.Files
-import java.nio.file.Path
+package aoc.days
+
+import aoc.days.BitCounter.Companion.value
+import com.soywiz.korio.file.VfsFile
 import kotlin.math.abs
-import kotlin.system.exitProcess
-
-val input = Path.of("input", "input-3.txt")
-    .let(Files::readAllLines)
-    .map { Number(it) }
-var result: Number = input.reduce { acc, element -> acc + element }
-println(result.gamma * result.epsilon)
-
-var rest = input
-var index = 0
-while (rest.size > 1){
-    rest = rest.filter { it[index] == rest.sum()[index] }
-    index++
-}
-val oxygen = rest.first().gamma
-rest = input
-index = 0
-while (rest.size > 1){
-    val lessCommon = rest.sum()[index, true]
-    rest = rest.filter { it[index] == lessCommon }
-    index++
-}
-val c02 = rest.first().gamma
-println(oxygen * c02)
-
-
-fun List<Number>.sum(): Number {
-    var result: Number? = null
-    forEach {
-        result = result?.plus(it) ?: it
-    }
-    return result!!
-}
 
 class Number private constructor(private val entries: Array<BitCounter>) {
     constructor(binary: String): this(Array(binary.length) { binary[it].value })
@@ -57,4 +25,39 @@ class BitCounter private constructor(private val zeros: Int, private val ones: I
     companion object {
         val Char.value get() = if (this == '0') BitCounter(1,0) else BitCounter(0,1)
     }
+}
+
+fun List<Number>.sum(): Number {
+    var result: Number? = null
+    forEach {
+        result = result?.plus(it) ?: it
+    }
+    return result!!
+}
+
+suspend fun run3(file: VfsFile) {
+    val input = file
+        .readLines()
+        .map { Number(it) }
+        .toList()
+    val result: Number = input.reduce { acc, element -> acc + element }
+    println(result.gamma * result.epsilon) //4139586
+
+    var rest = input
+    var index = 0
+    while (rest.size > 1){
+        rest = rest.filter { it[index] == rest.sum()[index] }
+        index++
+    }
+    val oxygen = rest.first().gamma
+    rest = input
+    index = 0
+    while (rest.size > 1){
+        val lessCommon = rest.sum()[index, true]
+        rest = rest.filter { it[index] == lessCommon }
+        index++
+    }
+    val c02 = rest.first().gamma
+    println(oxygen * c02) //1800151
+
 }

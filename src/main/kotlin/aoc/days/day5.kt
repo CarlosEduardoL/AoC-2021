@@ -1,6 +1,18 @@
-import java.nio.file.Files
-import java.nio.file.Path
+package aoc.days
 
+import com.soywiz.korio.file.VfsFile
+
+suspend fun run5(file: VfsFile){
+    val input = file.readLines()
+        .map { it.split(",|->".toRegex()).map(String::trim) }
+        .map { row -> row.map { it.toInt() } }
+        .map { Line(it) }
+        .toList()
+    // part 1 - 5576
+    println(input.count(true))
+    // part 2 - 18144
+    println(input.count())
+}
 
 fun List<Line>.count(ignoreDiagonal: Boolean = false): Int {
     return mutableMapOf<Point, Int>().also { counter ->
@@ -11,18 +23,6 @@ fun List<Line>.count(ignoreDiagonal: Boolean = false): Int {
         }
     }.count { it.value >= 2 }
 }
-
-
-val input = Path.of("input", "input-5.txt")
-    .let(Files::readAllLines)
-    .map { it.split(",|->".toRegex()).map(String::trim) }
-    .map { row -> row.map { it.toInt() } }
-    .map { Line(it) }
-// part 1 - 5576
-println(input.count(true))
-// part 2 - 18144
-println(input.count())
-
 
 data class Line(val start: Point, val end: Point) {
     constructor(data: List<Int>) : this(Point(data[0], data[1]), Point(data[2], data[3]))
